@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Create Account - Omnimun</title>
+
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+
+body{
+
+margin:0;
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+
+background:#e8e8e8;
+
+font-family:Inter,Arial,sans-serif;
+
+color:#222;
+
+}
+
+
+
+.container{
+
+width:420px;
+
+background:#fff;
+
+padding:42px;
+
+border-radius:24px;
+
+border:1px solid #ddd;
+
+box-shadow:
+0 20px 50px #00000018;
+
+}
+
+
+
+.logo{
+
+width:55px;
+height:55px;
+
+border-radius:18px;
+
+background:#000;
+
+color:#fff;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:28px;
+
+font-weight:900;
+
+margin-bottom:25px;
+
+}
+
+
+
+h1{
+
+margin:0 0 10px;
+
+font-size:32px;
+
+}
+
+
+
+p{
+
+color:#777;
+
+margin-bottom:30px;
+
+}
+
+
+
+label{
+
+display:block;
+
+font-size:13px;
+
+font-weight:600;
+
+margin-bottom:8px;
+
+}
+
+
+
+input{
+
+width:100%;
+
+padding:14px;
+
+border-radius:14px;
+
+border:1px solid #ccc;
+
+margin-bottom:18px;
+
+font-size:14px;
+
+outline:none;
+
+}
+
+
+
+input:focus{
+
+border-color:#000;
+
+}
+
+
+
+button{
+
+width:100%;
+
+padding:14px;
+
+border:0;
+
+border-radius:14px;
+
+background:#000;
+
+color:#fff;
+
+font-weight:700;
+
+cursor:pointer;
+
+}
+
+
+
+button:hover{
+
+opacity:.85;
+
+}
+
+
+
+.link{
+
+text-align:center;
+
+margin-top:22px;
+
+font-size:13px;
+
+color:#777;
+
+}
+
+
+
+.link a{
+
+color:#000;
+
+font-weight:700;
+
+text-decoration:none;
+
+}
+
+
+
+.brand{
+
+position:fixed;
+
+bottom:20px;
+
+right:25px;
+
+font-size:11px;
+
+letter-spacing:2px;
+
+color:#777;
+
+}
+
+
+#error{
+
+color:red;
+
+font-size:13px;
+
+margin-bottom:15px;
+
+}
+
+
+
+/* V7 LOGO UPDATE */
+.brand{display:flex;align-items:center;gap:0!important}
+.brand .word{display:none!important}
+.brand-logo{display:block;height:auto;object-fit:contain}
+.sidebar-logo{width:150px;max-width:100%}
+.auth-logo{width:190px;max-width:100%;display:block;margin:0 0 22px}
+.auth-logo.small{width:170px}
+.welcome-logo{width:240px;max-width:100%;display:block;margin:0 auto 18px}
+.logo,.ai-logo{background:transparent!important;color:transparent!important;padding:0!important;border-radius:0!important;width:auto!important;height:auto!important;font-size:0!important}
+@media(max-width:760px){
+  .sidebar-logo{width:38px}
+  aside .brand{justify-content:center}
+}
+</style>
+
+</head>
+
+
+
+<body>
+
+
+<div class="container">
+
+
+<img src="logo-omnimun.jpg" alt="Omnimun logo" class="auth-logo">
+
+
+<h1>
+Create Account
+</h1>
+
+
+<p>
+Join Omnimun AI workspace.
+</p>
+
+
+
+<div id="error"></div>
+
+
+
+<form id="registerForm">
+
+
+<label>
+Username
+</label>
+
+<input 
+id="username"
+type="text"
+placeholder="Enter username"
+required>
+
+<label>
+Email Gmail
+</label>
+
+<input 
+id="email"
+type="email"
+placeholder="your@gmail.com"
+required>
+
+
+
+<label>
+Password
+</label>
+
+<input 
+id="password"
+type="password"
+placeholder="Create password"
+required>
+
+
+
+<label>
+Confirm Password
+</label>
+
+<input 
+id="confirm"
+type="password"
+placeholder="Repeat password"
+required>
+
+
+
+<button type="submit">
+
+Create Account
+
+</button>
+
+
+</form>
+
+
+
+<div class="link">
+
+Already have an account?
+
+<a href="login.html">
+Sign in
+</a>
+
+
+</div>
+
+
+</div>
+
+
+
+<div class="brand">
+
+Made by Orthera
+
+</div>
+
+
+
+
+<script>
+
+
+document
+.getElementById("registerForm")
+.addEventListener("submit",async(e)=>{
+
+
+e.preventDefault();
+if(e.target.dataset.processing==='1') return;
+e.target.dataset.processing='1';
+
+
+
+const username =
+document.getElementById("username").value.trim();
+
+
+const email =
+document.getElementById("email").value.trim();
+
+
+
+const password =
+document.getElementById("password").value.trim();
+
+
+
+const confirm =
+document.getElementById("confirm").value.trim();
+
+
+
+
+if(!email.endsWith("@gmail.com")){
+
+document.getElementById("error")
+.textContent =
+"Please use a Gmail address";
+
+return;
+
+}
+
+
+
+if(username.length < 3){
+document.getElementById("error").textContent="Username minimal 3 karakter";
+return;
+}
+
+if(password.length < 8){
+document.getElementById("error").textContent="Password minimal 8 karakter";
+return;
+}
+
+if(password !== confirm){
+
+document.getElementById("error")
+.textContent =
+"Passwords do not match";
+
+return;
+
+}
+
+
+
+
+const res =
+await fetch("/api/register",{
+
+
+method:"POST",
+
+
+headers:{
+
+
+"Content-Type":
+"application/json"
+
+
+},
+
+
+body:JSON.stringify({
+
+username,
+
+email,
+
+password
+
+})
+
+
+});
+
+
+
+const data = await res.json().catch(()=>({error:'Invalid server response'}));
+
+
+
+
+if(data.success){
+
+localStorage.setItem("verifyEmail",email);
+
+window.location.href="/verify.html";
+
+
+}else{
+
+
+document.getElementById("error")
+.textContent =
+data.error || 'Unknown error';
+
+
+}
+
+
+
+});
+
+
+
+
+// Security guard
+const preventSpamGuard = (() => {
+ let last = 0;
+ return () => {
+   const now = Date.now();
+   if(now-last < 1200) return false;
+   last = now;
+   return true;
+ };
+})();
+
+</script>
+
+
+
+<script id="showPasswordToggle">
+document.querySelectorAll('input[type="password"]').forEach(input=>{
+ const btn=document.createElement('button'); btn.type='button';
+ btn.type='button';
+ btn.textContent='Show';
+ btn.style.marginBottom='10px';
+ btn.onclick=()=>{input.type=input.type==='password'?'text':'password';btn.textContent=input.type==='password'?'Show':'Hide';};
+ input.parentNode.insertBefore(btn,input.nextSibling);
+});
+</script>
+
+
+
+
+
+<script id="inputSecurity">
+(() => {
+ document.querySelectorAll('input,textarea').forEach(el => {
+   el.addEventListener('input', () => {
+     if(el.value.length > 5000){
+       el.value = el.value.substring(0,5000);
+     }
+   });
+ });
+})();
+</script>
+
+<script id="network-safe">
+window.addEventListener('unhandledrejection',e=>{
+ console.error('Unhandled request error',e.reason);
+});
+</script>
+</body>
+
+</html>

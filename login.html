@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login - Omnimun</title>
+
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+
+body{
+
+margin:0;
+min-height:100vh;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+background:#e8e8e8;
+
+font-family:Inter,Arial,sans-serif;
+
+color:#222;
+
+}
+
+
+
+.container{
+
+width:420px;
+
+background:#f7f7f7;
+
+padding:42px;
+
+border-radius:24px;
+
+border:1px solid #d5d5d5;
+
+box-shadow:
+0 20px 50px #00000018;
+
+}
+
+
+
+.logo{
+
+width:52px;
+height:52px;
+
+border-radius:18px;
+
+background:#111;
+
+color:white;
+
+display:flex;
+
+align-items:center;
+justify-content:center;
+
+font-size:26px;
+
+font-weight:900;
+
+margin-bottom:25px;
+
+}
+
+
+
+h1{
+
+margin:0 0 10px;
+
+font-size:32px;
+
+letter-spacing:-1px;
+
+}
+
+
+
+p{
+
+color:#777;
+
+font-size:14px;
+
+margin-bottom:30px;
+
+}
+
+
+
+label{
+
+display:block;
+
+font-size:13px;
+
+font-weight:600;
+
+margin-bottom:8px;
+
+}
+
+
+
+input{
+
+width:100%;
+
+padding:14px;
+
+border-radius:14px;
+
+border:1px solid #ccc;
+
+background:white;
+
+margin-bottom:18px;
+
+font-size:14px;
+
+outline:none;
+
+}
+
+
+
+input:focus{
+
+border-color:#111;
+
+}
+
+
+
+button{
+
+width:100%;
+
+padding:14px;
+
+border:0;
+
+border-radius:14px;
+
+background:#111;
+
+color:white;
+
+font-weight:700;
+
+cursor:pointer;
+
+}
+
+
+
+button:hover{
+
+background:#000;
+
+}
+
+
+
+#error{
+
+color:red;
+
+font-size:13px;
+
+margin-bottom:15px;
+
+}
+
+
+
+.link{
+
+text-align:center;
+
+margin-top:22px;
+
+font-size:13px;
+
+color:#777;
+
+}
+
+
+
+.link a{
+
+color:#111;
+
+font-weight:700;
+
+text-decoration:none;
+
+}
+
+
+
+.brand{
+
+position:fixed;
+
+bottom:20px;
+
+right:25px;
+
+font-size:11px;
+
+letter-spacing:2px;
+
+color:#777;
+
+}
+
+
+
+
+/* V7 LOGO UPDATE */
+.brand{display:flex;align-items:center;gap:0!important}
+.brand .word{display:none!important}
+.brand-logo{display:block;height:auto;object-fit:contain}
+.sidebar-logo{width:150px;max-width:100%}
+.auth-logo{
+  width:132px;
+  max-width:100%;
+  max-height:38px;
+  display:block;
+  object-fit:contain;
+  object-position:left center;
+  margin:0 0 24px;
+  mix-blend-mode:multiply;
+}
+.auth-logo.small{width:118px}
+.welcome-logo{width:210px;max-width:100%;display:block;margin:0 auto 18px}
+
+/* Slim Google sign-in button */
+.google-btn{
+  margin-top:10px;
+  min-height:42px;
+  padding:10px 14px;
+  border:1px solid #d7d7d7;
+  border-radius:12px;
+  background:#fff;
+  color:#222;
+  font-size:14px;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  box-shadow:none;
+}
+.google-btn:hover{
+  background:#f3f3f3;
+}
+.google-btn img{
+  width:18px;
+  height:18px;
+  flex:0 0 18px;
+  object-fit:contain;
+}
+.logo,.ai-logo{background:transparent!important;color:transparent!important;padding:0!important;border-radius:0!important;width:auto!important;height:auto!important;font-size:0!important}
+@media(max-width:760px){
+  .sidebar-logo{width:38px}
+  aside .brand{justify-content:center}
+}
+</style>
+
+</head>
+
+
+
+<body>
+
+
+
+<div class="container">
+
+
+<img src="logo-omnimun.jpg" alt="Omnimun logo" class="auth-logo">
+
+
+<h1>
+Welcome Back
+</h1>
+
+
+<p>
+Login to your Omnimun AI workspace.
+</p>
+
+
+
+<div id="error"></div>
+<div id="verifyHint" style="color:#777;font-size:13px;margin-bottom:15px;"></div>
+
+
+
+<form id="loginForm">
+
+
+<label>
+Username / Email
+</label>
+
+
+<input
+
+id="username"
+
+type="text"
+
+placeholder="Enter username or email"
+
+required>
+
+
+
+<label>
+Password
+</label>
+
+
+<input
+
+id="password"
+
+type="password"
+
+placeholder="Enter password"
+
+required>
+
+
+
+<button type="submit">
+
+Sign In
+
+</button>
+
+
+
+<button type="button" class="google-btn" onclick="location.href='/auth/google'"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">Continue with Google</button></form>
+
+
+
+
+<div class="link">
+
+Don't have an account?
+
+<a href="register.html">
+
+Create account
+
+</a>
+
+
+</div>
+
+
+</div>
+
+
+
+<div class="brand">
+
+Made by Orthera
+
+</div>
+
+
+
+
+
+<script>
+
+
+document
+.getElementById("loginForm")
+.addEventListener("submit",async(e)=>{
+
+
+e.preventDefault();
+if(e.target.dataset.processing==='1') return;
+e.target.dataset.processing='1';
+
+const btn=e.target.querySelector("button");
+btn.disabled=true;
+btn.textContent="Signing in...";
+
+
+
+const username =
+document.getElementById("username").value.trim();
+
+
+
+const password =
+document.getElementById("password").value.trim();
+
+
+
+
+const res =
+await fetch("/api/login",{
+
+
+method:"POST",
+
+
+headers:{
+
+
+"Content-Type":
+"application/json"
+
+
+},
+
+
+body:JSON.stringify({
+
+username,
+
+password
+
+})
+
+
+});
+
+
+
+const data = await res.json().catch(()=>({error:'Invalid server response'}));
+
+
+
+
+
+if(data.success){
+
+
+window.location.href="/index.html";
+
+
+}else{
+
+
+document
+.getElementById("error")
+.textContent =
+data.error || 'Unknown error';
+
+if(data.error && data.error.toLowerCase().includes("verify")){
+document.getElementById("verifyHint").textContent =
+'Need verification? <a href="/verify.html">Verify email</a>';
+}
+
+
+}
+
+
+
+});
+
+
+
+
+// Security guard
+const preventSpamGuard = (() => {
+ let last = 0;
+ return () => {
+   const now = Date.now();
+   if(now-last < 1200) return false;
+   last = now;
+   return true;
+ };
+})();
+
+</script>
+
+
+
+
+<script id="showPasswordToggle">
+document.querySelectorAll('input[type="password"]').forEach(input=>{
+ const btn=document.createElement('button'); btn.type='button';
+ btn.type='button';
+ btn.textContent='Show';
+ btn.style.marginBottom='10px';
+ btn.onclick=()=>{input.type=input.type==='password'?'text':'password';btn.textContent=input.type==='password'?'Show':'Hide';};
+ input.parentNode.insertBefore(btn,input.nextSibling);
+});
+</script>
+
+
+
+
+
+<script id="inputSecurity">
+(() => {
+ document.querySelectorAll('input,textarea').forEach(el => {
+   el.addEventListener('input', () => {
+     if(el.value.length > 5000){
+       el.value = el.value.substring(0,5000);
+     }
+   });
+ });
+})();
+</script>
+
+<script id="network-safe">
+window.addEventListener('unhandledrejection',e=>{
+ console.error('Unhandled request error',e.reason);
+});
+</script>
+</body>
+
+</html>

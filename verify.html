@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+
+<title>Verify Email - Omnimun</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;background:#ededed;font-family:Arial;color:#111}
+.container{width:420px;background:#fff;padding:40px;border-radius:24px;box-shadow:0 20px 50px #0002}
+.logo{width:55px;height:55px;background:#111;color:#fff;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900}
+input,button{width:100%;padding:14px;margin-top:12px;border-radius:14px}
+input{border:1px solid #ccc}
+button{border:0;background:#111;color:#fff;font-weight:bold}
+button:disabled{opacity:.5}
+.secondary{background:#ddd;color:#111}
+.message{margin-top:15px}.success{color:green}.error{color:red}
+
+/* V7 LOGO UPDATE */
+.brand{display:flex;align-items:center;gap:0!important}
+.brand .word{display:none!important}
+.brand-logo{display:block;height:auto;object-fit:contain}
+.sidebar-logo{width:150px;max-width:100%}
+.auth-logo{width:190px;max-width:100%;display:block;margin:0 0 22px}
+.auth-logo.small{width:170px}
+.welcome-logo{width:240px;max-width:100%;display:block;margin:0 auto 18px}
+.logo,.ai-logo{background:transparent!important;color:transparent!important;padding:0!important;border-radius:0!important;width:auto!important;height:auto!important;font-size:0!important}
+@media(max-width:760px){
+  .sidebar-logo{width:38px}
+  aside .brand{justify-content:center}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<img src="logo-omnimun.jpg" alt="Omnimun logo" class="auth-logo small">
+<h1>Verify Email</h1>
+<p>Enter the code sent to your Gmail.</p>
+<div id="message" class="message"></div>
+<label>Email</label>
+<input id="email" type="email" placeholder="your@gmail.com">
+<button id="sendCode" class="secondary">Send Code Again</button>
+<label>Verification Code</label>
+<input id="code" maxlength="6" placeholder="123456">
+<button id="verify">Verify Email</button>
+</div>
+
+<script>
+const emailInput=document.getElementById("email");
+const message=document.getElementById("message");
+const sendBtn=document.getElementById("sendCode");
+
+const savedEmail=localStorage.getItem("verifyEmail");
+if(savedEmail) emailInput.value=savedEmail;
+
+let timer=null;
+let seconds=60;
+
+sendBtn.onclick=async()=>{
+ if(!emailInput.value.trim()){
+   message.className="message error";
+   message.textContent="Email wajib diisi.";
+   return;
+ }
+
+ if(timer) return;
+
+ const res=await fetch("/api/send-code",{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({email:emailInput.value})
+ });
+
+ const data=await res.json().catch(()=>({error:"Invalid server response"}));
+
+ if(data.success){
+  message.className="message success";
+  message.textContent="Verification code sent.";
+
+  seconds=60;
+  sendBtn.disabled=true;
+
+  timer=setInterval(()=>{
+   seconds--;
+   sendBtn.textContent=`Resend available in ${seconds}s`;
+
+   if(seconds<=0){
+    clearInterval(timer);
+    timer=null;
+    sendBtn.disabled=false;
+    sendBtn.textContent="Send Code Again";
+   }
+  },1000);
+
+ }else{
+  message.className="message error";
+  message.textContent=data.error || 'Unknown error';
+ }
+};
+
+document.getElementById("verify").onclick=async()=>{
+ const res=await fetch("/api/verify",{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({
+   email:emailInput.value,
+   code:document.getElementById("code").value.trim()
+  })
+ });
+
+ const data=await res.json().catch(()=>({error:"Invalid server response"}));
+
+ if(data.success){
+  message.className="message success";
+  message.textContent="Email verified. Redirecting...";
+  localStorage.removeItem("verifyEmail");
+  setTimeout(()=>location.href="/login.html",1500);
+ }else{
+  message.className="message error";
+  message.textContent=data.error || 'Unknown error';
+ }
+};
+
+// Security guard
+const preventSpamGuard = (() => {
+ let last = 0;
+ return () => {
+   const now = Date.now();
+   if(now-last < 1200) return false;
+   last = now;
+   return true;
+ };
+})();
+
+</script>
+
+
+
+
+<script id="inputSecurity">
+(() => {
+ document.querySelectorAll('input,textarea').forEach(el => {
+   el.addEventListener('input', () => {
+     if(el.value.length > 5000){
+       el.value = el.value.substring(0,5000);
+     }
+   });
+ });
+})();
+</script>
+
+<script id="network-safe">
+window.addEventListener('unhandledrejection',e=>{
+ console.error('Unhandled request error',e.reason);
+});
+</script>
+</body>
+</html>
